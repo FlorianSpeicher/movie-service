@@ -1,0 +1,15 @@
+{
+  "title":"TestTitle2",
+  "length": "00:45:52",
+  "episodes":1,
+  "ageRestriction":18,
+  "regisseur":{
+    "firstName":"Tes2t",
+    "lastName":"Regisseur2"
+  },
+  "reviews":[
+    {
+      "comment":"Test commen4t2"
+    }
+  ]
+}
