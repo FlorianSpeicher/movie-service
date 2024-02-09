@@ -81,18 +81,16 @@ public class MovieControllerTest {
     @Test
     @DisplayName("List a Movie by its id:")
     public void listByIdTest(){
-        //Movie movie = new Movie("Star Wars: Krieg der Sterne", "03:00:00", 4, 12);
-        String movie = "[Movie{id=1, title='Star Wars: Krieg der Sterne', length=03:00:00, episodes=4," +
+        String movie = "Movie{id=1, title='Star Wars: Krieg der Sterne', length=03:00:00, episodes=4," +
             " ageRestriction=12, regisseur=Regisseur{id=1, firstName='George', lastName='Lucas'}, " +
                     "reviews=[Review{id=1, comment='Good movie!'}]. actors=[Actor{id=7, firstName='Alden', " +
-                    "lastName='Ehrenreich'}, Actor{id=8, firstName='Woody', lastName='Harrelson'}]}]";
+                    "lastName='Ehrenreich'}, Actor{id=8, firstName='Woody', lastName='Harrelson'}]}";
 
-        Response response = get("/movies/list/1");
-        System.out.println(response.statusCode());
-        Assertions.assertEquals(movie, response.getBody().asString());
+        Response response = given().get("/movies/list/id/{id}", 1);
+        Assertions.assertEquals(movie, (String) response.asString());
 
-        Response response1 = get("/movies/list/{id}", 999);
-        Assertions.assertEquals("", response1.asString());
+        Response response1 = get("/movies/list/id/{id}", 999);
+        Assertions.assertEquals("No Entry!", response1.asString());
 
 
     }
@@ -118,31 +116,37 @@ public class MovieControllerTest {
      */
 
     @Test
+    @DisplayName("List all movies of an regisseur:")
     public void listRegisseurTest(){
-        /*
-        with().body(new Regisseur("George", "Lucas"))
-                .when()
-                .request("POST", "/movies/list/regisseur")
-                .then()
-                .statusCode(200);
-        with().body(new Regisseur("Testy", "Testmann"))
-                .when()
-                .request("POST", "/movies/list/regisseur")
-                .then()
-                .statusCode(404);
+        //TODO change name of Regisseur and film to match
+        String movie = "Movie{id=2, title='Star Wars: Das Imperium schlägt zurück', length=03:00:00, episodes=5," +
+                " ageRestriction=12, regisseur=Regisseur{id=2, firstName='Irvin', lastName='Kershner'}, " +
+                "reviews=[Review{id=2, comment='Very cool scenes'}]. actors=[Actor{id=9, firstName='Diego', " +
+                "lastName='Luna'}, Actor{id=10, firstName='Ben', lastName='Mendelsohn'}]}";
+        String regisseur = "{firstName='Irvin', lastName='Kershner'}";
+
+        Response response = given().body(regisseur).post("/movies/list/regisseur");
+        Assertions.assertEquals(movie, (String) response.asString());
+
+        String noRegisseur = "{firstName='Max', lastName='Mustermann'}";
+
+        Response response1 = given().body(noRegisseur).get("/movies/list/regisseur");
+        Assertions.assertEquals("No Entry!", response1.asString());
 
 
-         */
-
-        Response response = RestAssured.post("https://localhost:8080/movies/list/regisseur");
+/*
+        Response response = RestAssured.post("/movies/list/regisseur");
         System.out.println(response.statusCode());
         System.out.println(response.getBody().asString());
         System.out.println(response.asString());
 
+
+ */
     }
     @Test
+    @DisplayName("List all movies of an actor:")
     public void listActorTest(){
-        with().body(new Actor("Ewan", "McGregor"))
+        given().body(new Actor("Ewan", "McGregor"))
                 .when()
                 .request("POST", "/movies/list/regisseur")
                 .then()
@@ -154,6 +158,7 @@ public class MovieControllerTest {
                 .statusCode(404);
     }
     @Test
+    @DisplayName("List all movies with a title:")
     public void listTitleTest(){
         with().body("Star Wars: Krieg der Sterne")
                 .when()
@@ -168,6 +173,7 @@ public class MovieControllerTest {
     }
 
     @Test
+    @DisplayName("Adding an actor to a movie:")
     public void addActorTest(){
         with()
                 .body(new Actor("Testy", "Testmann"))
@@ -178,6 +184,7 @@ public class MovieControllerTest {
 
     }
     @Test
+    @DisplayName("Update a movie by its id:")
     public void updateTest(){
         when()
                 .request("PUT", "/movies/update/{id}", 10)
@@ -185,6 +192,7 @@ public class MovieControllerTest {
                 .statusCode(200);
     }
     @Test
+    @DisplayName("Delete a movie by its id:")
     public void deleteTest(){
         when()
                 .request("DELETE", "/movies/delete/{id}", 10)
