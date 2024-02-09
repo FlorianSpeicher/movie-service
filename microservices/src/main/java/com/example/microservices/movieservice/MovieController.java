@@ -16,7 +16,7 @@ public class MovieController {
 
     //Service declaration
     private MovieService movieService;
-    private static final java.lang.String noEntryResponse = "No Entry!";
+    private static final String noEntryResponse = "No Entry!";
 
     /**
      * Constructor with the initialisation of the MovieService
