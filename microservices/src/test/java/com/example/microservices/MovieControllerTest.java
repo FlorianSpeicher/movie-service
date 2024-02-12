@@ -1,10 +1,6 @@
 package com.example.microservices;
-
-import com.example.microservices.movieservice.entity.Review;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
-
-import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -15,9 +11,7 @@ import static io.restassured.RestAssured.*;
 @SpringBootTest(classes = MicroservicesApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class MovieControllerTest {
-
     private String noEntryResponse = "No Entry!";
-
 
     @Test
     @Order(1)
@@ -31,7 +25,6 @@ public class MovieControllerTest {
         Assertions.assertEquals(fullList, response.asString());
     }
 
-
     @Test
     @Order(2)
     @DisplayName("List Movie by ID:")
@@ -44,8 +37,6 @@ public class MovieControllerTest {
 
         Response response1 = get(url, 999);
         Assertions.assertEquals(noEntryResponse, response1.asString());
-
-
     }
 
     @Test
@@ -78,6 +69,7 @@ public class MovieControllerTest {
         Response response1 = given().body(noRegisseur).post(url);
         Assertions.assertEquals(noEntryResponse, response1.asString());
     }
+
     @Test
     @Order(4)
     @DisplayName("List Actor:")
@@ -94,6 +86,7 @@ public class MovieControllerTest {
         Response response1 = given().body(noActor).post(url);
         Assertions.assertEquals(noEntryResponse, response1.asString());
     }
+
     @Test
     @Order(5)
     @DisplayName("List Title:")
@@ -124,8 +117,8 @@ public class MovieControllerTest {
 
         Response response1 = given().body(actor).post(url, 999);
         Assertions.assertEquals(noEntryResponse, response1.asString());
-
     }
+
     @Test
     @Order(8)
     @DisplayName("Update Movie:")
@@ -139,6 +132,7 @@ public class MovieControllerTest {
         Response response1 = given().body(movie).put(url, 999);
         Assertions.assertEquals(noEntryResponse, response1.asString());
     }
+
     @Test
     @Order(7)
     @DisplayName("Delete Movie:")
