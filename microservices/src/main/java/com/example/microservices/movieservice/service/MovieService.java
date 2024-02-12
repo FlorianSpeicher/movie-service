@@ -1,11 +1,13 @@
 package com.example.microservices.movieservice.service;
 
+import com.example.microservices.movieservice.entity.Review;
 import com.example.microservices.movieservice.repositories.ActorRepository;
 import com.example.microservices.movieservice.repositories.MovieRepository;
 import com.example.microservices.movieservice.repositories.RegisseurRepository;
 import com.example.microservices.movieservice.entity.Actor;
 import com.example.microservices.movieservice.entity.Movie;
 import com.example.microservices.movieservice.entity.Regisseur;
+import com.example.microservices.movieservice.repositories.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,16 +26,18 @@ public class MovieService implements MovieServiceInterface {
     private MovieRepository movieRepository;
     private ActorRepository actorRepository;
     private RegisseurRepository regisseurRepository;
+    private ReviewRepository reviewRepository;
 
     /**
      * Constructor of the class
      * @param movieRepository is the accessing object of the database
      */
     @Autowired
-    public MovieService (MovieRepository movieRepository, ActorRepository actorRepository, RegisseurRepository regisseurRepository){
+    public MovieService (MovieRepository movieRepository, ActorRepository actorRepository, RegisseurRepository regisseurRepository, ReviewRepository reviewRepository){
         this.movieRepository = movieRepository;
         this.actorRepository = actorRepository;
         this.regisseurRepository = regisseurRepository;
+        this.reviewRepository = reviewRepository;
     }
 
     /**
@@ -166,6 +170,32 @@ public class MovieService implements MovieServiceInterface {
     @Override
     public List<Regisseur> findAllRegisseurs() {
         return regisseurRepository.findAll();
+    }
+
+    @Override
+    public Review save(Review review) {
+        if (reviewRepository.findAll().contains(review)){
+            return review;
+        } else {
+            return reviewRepository.save(review);
+        }
+    }
+
+    @Override
+    public void deleteReview(int id) {
+        reviewRepository.deleteById(id);
+    }
+
+    @Override
+    public Review findReviewById(int id) {
+        Optional<Review> review = reviewRepository.findById(id);
+        Review review1 = null;
+        if(review.isPresent()){
+            review1 = review.get();
+            return review1;
+        } else {
+            return null;
+        }
     }
 
 

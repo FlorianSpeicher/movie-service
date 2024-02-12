@@ -3,6 +3,7 @@ package com.example.microservices.movieservice.service;
 import com.example.microservices.movieservice.entity.Actor;
 import com.example.microservices.movieservice.entity.Movie;
 import com.example.microservices.movieservice.entity.Regisseur;
+import com.example.microservices.movieservice.entity.Review;
 
 import java.util.List;
 
@@ -20,4 +21,8 @@ public interface MovieServiceInterface{
     List<Movie> findByActor(Actor actor);
     List<Actor> findAllActors();
     List<Regisseur> findAllRegisseurs();
+    Review save(Review review);
+    void deleteReview(int id);
+    Review findReviewById(int id);
 }
+

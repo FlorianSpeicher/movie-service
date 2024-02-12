@@ -146,6 +146,7 @@ public class Movie {
     public void setActors(Actor actors) {
         this.actors.add(actors);
     }
+    public void setAllActors(List<Actor> actors){this.actors = actors;}
 
 
     /**

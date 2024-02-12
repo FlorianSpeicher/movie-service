@@ -3,18 +3,16 @@ package com.example.microservices.movieservice;
 import com.example.microservices.movieservice.entity.Actor;
 import com.example.microservices.movieservice.entity.Movie;
 import com.example.microservices.movieservice.entity.Regisseur;
+import com.example.microservices.movieservice.entity.Review;
 import com.example.microservices.movieservice.service.MovieService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.JsonPath;
-import org.json.JSONObject;
-import org.springframework.core.codec.StringDecoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.DataInput;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.StringTokenizer;
 
 /**
  * Controller of the movie service
@@ -180,28 +178,54 @@ public class MovieController {
      */
     @PutMapping("/update/{id}")
     public String updateMovie(@RequestBody String movie, @PathVariable int id){
+        String[] movieSplit = movie.split(", \"reviews\"");
+        String movieString = movieSplit[0];
+        String reviewString = movieSplit[1];
+
+
+        String[] movieStringSplit = movieString.split(", \"regisseur\":");
+        movieString = movieStringSplit[0] + "}";
+        String regisseurString = movieStringSplit[1];
+
+
+        String[] secondSplit = reviewString.split(", \"actors\":");
+        String actors = secondSplit[1];
+        actors = actors.substring(0, actors.length()-1);
+        String reviews = secondSplit[0];
 
         ObjectMapper objectMapper = new ObjectMapper();
         Movie tempMovie;
+        Review[] reviewList;
+        Actor[] actorList;
+        Regisseur regisseur;
         try {
-            System.out.println(movie);
-            tempMovie = objectMapper.readValue(movie, Movie.class);
+            tempMovie = objectMapper.readValue(movieString, Movie.class);
+            tempMovie.setId(id);
+            reviewList = objectMapper.readValue(reviews, Review[].class);
+            actorList = objectMapper.readValue(actors, Actor[].class);
+            regisseur = objectMapper.readValue(regisseurString, Regisseur.class);
+
+
         } catch (JsonProcessingException e) {
-            System.out.println("catch fall");
+            System.out.println("Catch Fall!");
             return noEntryResponse;
         }
-        //Movie tempMovie = movieService.findById(id);
-         if(tempMovie == null){
-             System.out.println("Kein Film gefunden");
-             return noEntryResponse;
-         } else {
-             System.out.println("Film gefunden");
-             Movie newMovie = new Movie(tempMovie.getTitle(), tempMovie.getLength(), tempMovie.getEpisodes(),
-                     tempMovie.getAgeRestriction(), tempMovie.getRegisseur(), tempMovie.getReviews(),
-                     tempMovie.getActors());
-             newMovie.setId(id);
-             return movieService.save(newMovie).toString();
-         }
+        List<Review> finalReviews = new ArrayList<>(Arrays.asList(reviewList));
+        tempMovie.setReviews(finalReviews);
+        List<Actor> finalActors = new ArrayList<>(Arrays.asList(actorList));
+        tempMovie.setAllActors(finalActors);
+        tempMovie.setRegisseur(regisseur);
+
+        if (movieService.findById(id) == null){
+            return noEntryResponse;
+        }else {
+            return movieService.save(tempMovie).toString();
+        }
+
+
+
+
+
 
     }
 
@@ -211,7 +235,7 @@ public class MovieController {
      * @return a String with the success/failure message
      */
     @DeleteMapping("/delete/{id}")
-    public java.lang.String deleteMovie(@PathVariable int id) {
+    public String deleteMovie(@PathVariable int id) {
         Movie tempMovie = movieService.findById(id);
         if(tempMovie == null){
             return noEntryResponse;
@@ -219,5 +243,35 @@ public class MovieController {
             movieService.deleteById(id);
             return "Deleted!";
         }
+    }
+
+    @PostMapping("/addReview/{id}")
+    public String addReview(@PathVariable int id, @RequestBody String review){
+        ObjectMapper objectMapper = new ObjectMapper();
+        Review review1;
+        try {
+            review1 = objectMapper.readValue(review, Review.class);
+        } catch (JsonProcessingException e) {
+            return noEntryResponse;
+        }
+        Movie tempMovie = movieService.findById(id);
+        if(tempMovie == null){
+            return noEntryResponse;
+        }else {
+            List<Review> tempList = tempMovie.getReviews();
+            tempList.add(review1);
+           tempMovie.setReviews(tempList);
+            return movieService.save(tempMovie).toString();
+        }
+    }
+
+    @DeleteMapping("/deleteReview/{id}")
+    public String deleteReview(@PathVariable int id){
+       if (movieService.findReviewById(id) != null){
+           movieService.deleteReview(id);
+           return "Deleted!";
+       }else {
+           return noEntryResponse;
+       }
     }
 }
