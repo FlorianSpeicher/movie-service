@@ -122,10 +122,10 @@ public class Actor {
      */
     @Override
     public java.lang.String toString() {
-        return "Actor{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                '}';
+        return "{" +
+                "\"id\":" + id +
+                ", \"firstName\":\"" + firstName +
+                "\", \"lastName\":\"" + lastName +
+                "\"}";
     }
 }

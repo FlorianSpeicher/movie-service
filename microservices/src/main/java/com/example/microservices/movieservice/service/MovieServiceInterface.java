@@ -18,4 +18,6 @@ public interface MovieServiceInterface{
     List<Movie> findByTitle(java.lang.String title);
     List<Movie> findByRegisseur(Regisseur regisseur);
     List<Movie> findByActor(Actor actor);
+    List<Actor> findAllActors();
+    List<Regisseur> findAllRegisseurs();
 }

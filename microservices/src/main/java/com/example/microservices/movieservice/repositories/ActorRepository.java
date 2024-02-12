@@ -1,4 +1,4 @@
-package com.example.microservices.movieservice;
+package com.example.microservices.movieservice.repositories;
 
 import com.example.microservices.movieservice.entity.Actor;
 import org.springframework.data.jpa.repository.JpaRepository;

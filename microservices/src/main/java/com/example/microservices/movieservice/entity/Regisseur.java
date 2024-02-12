@@ -117,10 +117,10 @@ public class Regisseur {
      */
     @Override
     public String toString() {
-        return "Regisseur{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                '}';
+        return "{" +
+                "\"id\":" + id +
+                ", \"firstName\":\"" + firstName +
+                "\", \"lastName\":\"" + lastName +
+                "\"}";
     }
 }

@@ -183,15 +183,15 @@ public class Movie {
      */
     @Override
     public String toString() {
-        return "Movie{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", length=" + length +
-                ", episodes=" + episodes +
-                ", ageRestriction=" + ageRestriction +
-                ", regisseur=" + regisseur +
-                ", reviews=" + reviews +
-                ". actors=" + actors +
-                '}';
+        return "{" +
+                "\"id\":" + id +
+                ", \"title\":\"" + title +
+                "\", \"length\":\"" + length +
+                "\", \"episodes\":" + episodes +
+                ", \"ageRestriction\":" + ageRestriction +
+                ", \"regisseur\":" + regisseur +
+                ", \"reviews\"" + reviews +
+                ", \"actors\":" + actors +
+                "}";
     }
 }

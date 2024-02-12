@@ -1,7 +1,8 @@
 package com.example.microservices.movieservice.service;
 
-import com.example.microservices.movieservice.ActorRepository;
-import com.example.microservices.movieservice.MovieRepository;
+import com.example.microservices.movieservice.repositories.ActorRepository;
+import com.example.microservices.movieservice.repositories.MovieRepository;
+import com.example.microservices.movieservice.repositories.RegisseurRepository;
 import com.example.microservices.movieservice.entity.Actor;
 import com.example.microservices.movieservice.entity.Movie;
 import com.example.microservices.movieservice.entity.Regisseur;
@@ -22,15 +23,17 @@ public class MovieService implements MovieServiceInterface {
     //Declaration of the repository
     private MovieRepository movieRepository;
     private ActorRepository actorRepository;
+    private RegisseurRepository regisseurRepository;
 
     /**
      * Constructor of the class
      * @param movieRepository is the accessing object of the database
      */
     @Autowired
-    public MovieService (MovieRepository movieRepository, ActorRepository actorRepository){
+    public MovieService (MovieRepository movieRepository, ActorRepository actorRepository, RegisseurRepository regisseurRepository){
         this.movieRepository = movieRepository;
         this.actorRepository = actorRepository;
+        this.regisseurRepository = regisseurRepository;
     }
 
     /**
@@ -94,7 +97,7 @@ public class MovieService implements MovieServiceInterface {
      * @return a List of Movies that match with the title. List because episodes of series have the same title
      */
     @Override
-    public List<Movie> findByTitle(java.lang.String title) {
+    public List<Movie> findByTitle(String title) {
         List<Movie> movieList = movieRepository.findAll();
         List<Movie> movieWithTitle = new ArrayList<>();
         for (Movie movie: movieList) {
@@ -113,10 +116,17 @@ public class MovieService implements MovieServiceInterface {
      */
     @Override
     public List<Movie> findByRegisseur(Regisseur regisseur) {
+        List<Regisseur> regisseurs = findAllRegisseurs();
+        Regisseur finalRegisseur = regisseur;
+        for (Regisseur regisseur1: regisseurs){
+            if(Objects.equals(regisseur1.getFirstName(), regisseur.getFirstName()) && Objects.equals(regisseur1.getLastName(), regisseur.getLastName())){
+                finalRegisseur = regisseur1;
+            }
+        }
         List<Movie> movieList = movieRepository.findAll();
         List<Movie> movieWithRegisseur = new ArrayList<>();
         for (Movie movie: movieList) {
-            if (regisseur == movie.getRegisseur()){
+            if (movie.getRegisseur() == finalRegisseur){
                 movieWithRegisseur.add(movie);
             }
         }
@@ -131,13 +141,32 @@ public class MovieService implements MovieServiceInterface {
      */
     @Override
     public List<Movie> findByActor(Actor actor) {
+        List<Actor> actors = findAllActors();
+        Actor finalActor = actor;
+        for (Actor actor1: actors) {
+            if (Objects.equals(actor1.getFirstName(), actor.getFirstName()) && Objects.equals(actor1.getLastName(), actor.getLastName())){
+                finalActor = actor1;
+            }
+        }
         List<Movie> movieList = movieRepository.findAll();
         List<Movie> movieWithActor = new ArrayList<>();
         for (Movie movie: movieList) {
-            if(movie.getActors().contains(actor)){
+            if(movie.getActors().contains(finalActor)){
                 movieWithActor.add(movie);
             }
         }
         return movieWithActor;
     }
+
+    @Override
+    public List<Actor> findAllActors() {
+       return actorRepository.findAll();
+    }
+
+    @Override
+    public List<Regisseur> findAllRegisseurs() {
+        return regisseurRepository.findAll();
+    }
+
+
 }
