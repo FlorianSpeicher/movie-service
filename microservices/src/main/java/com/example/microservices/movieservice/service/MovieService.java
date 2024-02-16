@@ -198,5 +198,15 @@ public class MovieService implements MovieServiceInterface {
         }
     }
 
+    @Override
+    public List<Movie> findAllMoviesOfRegisseur(int id) {
+        return Objects.requireNonNull(regisseurRepository.findById(id).orElse(null)).getMovies();
+    }
+
+    @Override
+    public List<Movie> findAllMoviesOfActor(int id) {
+        return Objects.requireNonNull(actorRepository.findById(id).orElse(null)).getMovies();
+    }
+
 
 }

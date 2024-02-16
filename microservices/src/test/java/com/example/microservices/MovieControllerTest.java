@@ -171,4 +171,40 @@ public class MovieControllerTest {
         Assertions.assertEquals(noEntryResponse, response1.asString());
 
     }
+
+    @Test
+    @Order(3)
+    @DisplayName("List all Regisseurs:")
+    public void listAllRegisseurs(){
+        String url = "/movies/list/regisseurs/all";
+        String erg = "[{\"id\":1, \"firstName\":\"George\", \"lastName\":\"Lucas\"}, {\"id\":2, \"firstName\":\"Irvin\", \"lastName\":\"Kershner\"}, {\"id\":3, \"firstName\":\"Richard\", \"lastName\":\"Marquand\"}, {\"id\":4, \"firstName\":\"J.J.\", \"lastName\":\"Abrams\"}, {\"id\":5, \"firstName\":\"Rian\", \"lastName\":\"Johnson\"}]";
+        Assertions.assertEquals(erg, get(url).asString());
+    }
+
+    @Test
+    @Order(3)
+    @DisplayName("List all Actors:")
+    public void listAllActors(){
+        String url = "/movies/list/actors/all";
+        String erg = "[{\"id\":1, \"firstName\":\"Ewan\", \"lastName\":\"McGregor\"}, {\"id\":2, \"firstName\":\"Liam\", \"lastName\":\"Neeson\"}, {\"id\":3, \"firstName\":\"Natalie\", \"lastName\":\"Portman\"}, {\"id\":4, \"firstName\":\"Hayden\", \"lastName\":\"Christensen\"}, {\"id\":5, \"firstName\":\"Jimmy\", \"lastName\":\"Smits\"}, {\"id\":6, \"firstName\":\"Anthony\", \"lastName\":\"Daniels\"}, {\"id\":7, \"firstName\":\"Alden\", \"lastName\":\"Ehrenreich\"}, {\"id\":8, \"firstName\":\"Woody\", \"lastName\":\"Harrelson\"}, {\"id\":9, \"firstName\":\"Diego\", \"lastName\":\"Luna\"}, {\"id\":10, \"firstName\":\"Ben\", \"lastName\":\"Mendelsohn\"}, {\"id\":11, \"firstName\":\"Mark\", \"lastName\":\"Hamill\"}, {\"id\":12, \"firstName\":\"Harrison\", \"lastName\":\"Ford\"}, {\"id\":13, \"firstName\":\"Carrie\", \"lastName\":\"Fisher\"}, {\"id\":14, \"firstName\":\"Kenny\", \"lastName\":\"Baker\"}, {\"id\":15, \"firstName\":\"David\", \"lastName\":\"Prowse\"}, {\"id\":16, \"firstName\":\"Frank\", \"lastName\":\"Oz\"}, {\"id\":17, \"firstName\":\"Daisy\", \"lastName\":\"Ridley\"}, {\"id\":18, \"firstName\":\"Adam\", \"lastName\":\"Driver\"}]";
+        Assertions.assertEquals(erg, get(url).asString());
+    }
+
+    @Test
+    @Order(4)
+    @DisplayName("List all movies of a regisseur:")
+    public void listAllMoviesOfRegisseurs(){
+        String url = "/movies/list/id/regisseur/{id}";
+        String erg = "[{\"id\":3, \"title\":\"Star Wars: Rückkehr der Jedi-Ritter\", \"length\":\"03:00:00\", \"episodes\":6, \"ageRestriction\":12, \"regisseur\":{\"id\":3, \"firstName\":\"Richard\", \"lastName\":\"Marquand\"}, \"reviews\"[{\"id\":3, \"comment\":\"Well playing actors\"}], \"actors\":[{\"id\":11, \"firstName\":\"Mark\", \"lastName\":\"Hamill\"}, {\"id\":12, \"firstName\":\"Harrison\", \"lastName\":\"Ford\"}]}]";
+        Assertions.assertEquals(erg, get(url, 3).asString());
+    }
+
+    @Test
+    @Order(4)
+    @DisplayName("List all movies of an actor:")
+    public void listAllMoviesOfActor(){
+        String url = "/movies/list/id/actor/{id}";
+        String erg = "[{\"id\":5, \"title\":\"Star Wars: Angriff der Klonkrieger\", \"length\":\"03:00:00\", \"episodes\":2, \"ageRestriction\":12, \"regisseur\":{\"id\":1, \"firstName\":\"George\", \"lastName\":\"Lucas\"}, \"reviews\"[{\"id\":5, \"comment\":\"Cool and amazing\"}], \"actors\":[{\"id\":3, \"firstName\":\"Natalie\", \"lastName\":\"Portman\"}, {\"id\":4, \"firstName\":\"Hayden\", \"lastName\":\"Christensen\"}]}]";
+        Assertions.assertEquals(erg, get(url, 4).asString());
+    }
 }

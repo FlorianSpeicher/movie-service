@@ -24,5 +24,9 @@ public interface MovieServiceInterface{
     Review save(Review review);
     void deleteReview(int id);
     Review findReviewById(int id);
+
+    List<Movie> findAllMoviesOfRegisseur(int id);
+
+    List<Movie> findAllMoviesOfActor(int id);
 }
 

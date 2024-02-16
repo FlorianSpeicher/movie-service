@@ -39,6 +39,42 @@ public class MovieController {
         }
     }
 
+    @GetMapping("/list/regisseurs/all")
+    public String listAllRegisseurs(){
+        if(movieService.findAllRegisseurs() != null) {
+            return movieService.findAllRegisseurs().toString();
+        }else {
+            return noEntryResponse;
+        }
+    }
+
+    @GetMapping("/list/actors/all")
+    public String listAllActors(){
+        if(movieService.findAllActors() != null) {
+            return movieService.findAllActors().toString();
+        }else {
+            return noEntryResponse;
+        }
+    }
+
+    @GetMapping("/list/id/regisseur/{id}")
+    public String listAllMoviesOfRegisseur(@PathVariable int id){
+        if(movieService.findAllMoviesOfRegisseur(id) != null) {
+            return movieService.findAllMoviesOfRegisseur(id).toString();
+        }else {
+            return noEntryResponse;
+        }
+    }
+
+    @GetMapping("/list/id/actor/{id}")
+    public String listAllMoviesOfActor(@PathVariable int id){
+        if(movieService.findAllMoviesOfActor(id) != null) {
+            return movieService.findAllMoviesOfActor(id).toString();
+        }else {
+            return noEntryResponse;
+        }
+    }
+
     @PostMapping("/list/regisseur")
     public String listByRegisseur(@RequestBody String regisseur){
         ObjectMapper objectMapper = new ObjectMapper();
