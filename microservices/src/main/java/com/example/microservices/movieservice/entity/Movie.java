@@ -138,7 +138,7 @@ public class Movie {
                 "\", \"episodes\":" + episodes +
                 ", \"ageRestriction\":" + ageRestriction +
                 ", \"regisseur\":" + regisseur +
-                ", \"reviews\"" + reviews +
+                ", \"reviews\":" + reviews +
                 ", \"actors\":" + actors +
                 "}";
     }

@@ -66,6 +66,24 @@ public class MovieController {
         }
     }
 
+    @GetMapping("/list/id/onlyregisseur/{id}")
+    public String listOnlyRegisseurObject(@PathVariable int id){
+        if(movieService.findRegisseurById(id) != null) {
+            return movieService.findRegisseurById(id).toString();
+        }else {
+            return noEntryResponse;
+        }
+    }
+
+    @GetMapping("/list/id/onlyactor/{id}")
+    public String listOnlyActorObject(@PathVariable int id){
+        if(movieService.findActorById(id) != null) {
+            return movieService.findActorById(id).toString();
+        }else {
+            return noEntryResponse;
+        }
+    }
+
     @GetMapping("/list/id/actor/{id}")
     public String listAllMoviesOfActor(@PathVariable int id){
         if(movieService.findAllMoviesOfActor(id) != null) {
@@ -175,7 +193,7 @@ public class MovieController {
 
     @PutMapping("/update/{id}")
     public String updateMovie(@RequestBody String movie, @PathVariable int id){
-        String[] movieSplit = movie.split(", \"reviews\"");
+        String[] movieSplit = movie.split(", \"reviews\":");
         String movieString = movieSplit[0];
         String reviewString = movieSplit[1];
 

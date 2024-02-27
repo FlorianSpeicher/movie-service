@@ -28,5 +28,9 @@ public interface MovieServiceInterface{
     List<Movie> findAllMoviesOfRegisseur(int id);
 
     List<Movie> findAllMoviesOfActor(int id);
+
+    Actor findActorById(int id);
+
+    Regisseur findRegisseurById(int id);
 }
 
